@@ -1,16 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:shopping_app/src/dashboard/tab/shopping/data/model/item_model.dart';
+import 'package:shopping_app/src/dashboard/tab/shopping/data/model/item_response.dart';
 
-part 'product_model.g.dart';
+
+part 'product_response.g.dart';
 
 @JsonSerializable()
-class ProductModel {
-  final List<ItemModel>? items;
+class ProductResponse {
+  final List<ItemResponse>? items;
+  final String? nextCursor;
 
-  ProductModel({this.items});
+  ProductResponse({this.items, this.nextCursor});
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductModelFromJson(json);
+  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProductResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductModelToJson(this);
+  Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
 }

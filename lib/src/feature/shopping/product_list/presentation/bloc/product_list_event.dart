@@ -4,6 +4,13 @@ part of 'product_list_bloc.dart';
 abstract class ProductListEvent {}
 
 class ProductListLoadData extends ProductListEvent {
+  final String cursor;
 
-  ProductListLoadData();
+  ProductListLoadData(this.cursor);
+}
+
+class ProductListLoadMoreData extends ProductListEvent {
+  final String cursor;
+
+  ProductListLoadMoreData(this.cursor);
 }

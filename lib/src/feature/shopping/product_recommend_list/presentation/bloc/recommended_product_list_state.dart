@@ -1,16 +1,16 @@
-part of 'product_list_bloc.dart';
+part of 'recommended_product_list_bloc.dart';
 
 @immutable
-abstract class ProductListState {}
+abstract class RecommendedProductListState {}
 
-class ProductListInitial extends ProductListState {}
+class RecommendedProductListInitial extends RecommendedProductListState {}
 
-class ProductListLoading extends ProductListState {}
+class RecommendedProductListLoading extends RecommendedProductListState {}
 
-class ProductListSuccess extends ProductListState {
-  final ProductListModel product;
+class RecommendProductListSuccess extends RecommendedProductListState {
+  final List<ItemModel> product;
 
-  ProductListSuccess({required this.product});
+  RecommendProductListSuccess({required this.product});
 }
 
-class ProductListError extends ProductListState {}
+class RecommendedProductListError extends RecommendedProductListState {}

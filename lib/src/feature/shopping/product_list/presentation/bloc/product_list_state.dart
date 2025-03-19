@@ -13,4 +13,6 @@ class ProductListSuccess extends ProductListState {
   ProductListSuccess({required this.product});
 }
 
+class ProductListLoadingMore extends ProductListState {}
+
 class ProductListError extends ProductListState {}

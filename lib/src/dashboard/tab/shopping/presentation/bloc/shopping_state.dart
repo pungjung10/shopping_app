@@ -7,8 +7,10 @@ class ShoppingInitial extends ShoppingState {}
 
 class ShoppingLoading extends ShoppingState {}
 
-class ShoppingSuccess extends ShoppingState {
+class ProductSuccess extends ShoppingState {
+  final List<ProductListModel> product;
 
+  ProductSuccess({required this.product});
 }
 
-class ShoppingError extends ShoppingState {}
+class ProductError extends ShoppingState {}

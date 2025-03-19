@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/product_model.dart';
-import 'package:shopping_app/src/dashboard/tab/shopping/domain/usecase/get_product_usecase.dart';
+import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
+import 'package:shopping_app/src/feature/shopping/product_recommend_list/domain/get_recommended_product_usecase.dart';
 
-part 'product_list_event.dart';
+part 'recommended_product_list_event.dart';
 
-part 'product_list_state.dart';
+part 'recommended_product_list_state.dart';
 
-class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
-  final GetProductUseCase _getProductUseCase;
+class RecommendedProductListBloc extends Bloc<RecommendedProductListEvent, RecommendedProductListState> {
+  final GetRecommendedProductUseCase _getRecommendedProductUseCase;
 
-  ProductListBloc(this._getProductUseCase) : super(ProductListInitial()) {
-    on<ProductListLoadData>((event, emit) async {
-      emit(ProductListLoading());
-      final result = await _getProductUseCase.execute();
+  RecommendedProductListBloc(this._getRecommendedProductUseCase) : super(RecommendedProductListInitial()) {
+    on<RecommendedProductListLoadData>((event, emit) async {
+      emit(RecommendedProductListLoading());
+      final result = await _getRecommendedProductUseCase.execute();
       result.fold((e) {
-        emit(ProductListError());
+        emit(RecommendedProductListError());
       }, (res) {
-        emit(ProductListSuccess(product: res));
+        emit(RecommendProductListSuccess(product: res));
       });
     });
   }

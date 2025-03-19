@@ -1,70 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/src/dashboard/tab/shopping/bloc/shopping_bloc.dart';
+import 'package:shopping_app/src/core/style/color_resource.dart';
+import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
+import 'package:shopping_app/src/feature/shopping/product_item/presentation/bloc/product_bloc.dart';
 
+import '../../../../core/style/text_styles.dart';
 import '../../../../shared/widget/button_widget.dart';
 
 class ProductItemWidget extends StatelessWidget {
-  final String product;
+  final ItemModel item;
 
-  const ProductItemWidget({super.key, required this.product});
+  const ProductItemWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(Icons.image, size: 40, color: Colors.grey[600]),
+          Image.asset(
+            width: 76,
+            height: 76,
+            "assets/common/image.png",
+            fit: BoxFit.cover,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.deepPurple[900]),
+                  item.name,
+                  style: fontTitleMedium.copyWith(
+                      color: ColorResources.primaryContainer),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  "59.00 / unit",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                ),
+                Row(
+                  children: [
+                    Text(
+                      (item.price).toString(),
+                      style: fontTitleLarge.copyWith(
+                          color: ColorResources.primaryFixVariant),
+                    ),
+                    Text(
+                      " / unit",
+                      style: fontTitleSmall.copyWith(
+                          color: ColorResources.secondary),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-          BlocBuilder<ShoppingBloc, ShoppingState>(
+          BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
-              int quantity = 0;
+              int quantity = state.items[item.name] ?? 0;
               return quantity > 0
                   ? Row(
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove,
-                              color: Colors.deepPurple),
-                          onPressed: () => {},
-                        ),
-                        Text(quantity.toString(),
-                            style: const TextStyle(fontSize: 16)),
-                        IconButton(
-                          icon: const Icon(Icons.add, color: Colors.deepPurple),
-                          onPressed: () => {},
-                        ),
+                        buttonIcon(
+                            icon: Icons.remove,
+                            onEvent: () {
+                              BlocProvider.of<ProductBloc>(context)
+                                  .add(RemoveItemEvent(item.name));
+                            }),
+                        Text(quantity.toString(), style: fontTitleMedium),
+                        buttonIcon(
+                            icon: Icons.add,
+                            onEvent: () {
+                              BlocProvider.of<ProductBloc>(context)
+                                  .add(AddItemEvent(item.name));
+                            })
                       ],
                     )
-                  : buttonTextWhite(text: "Add to cart", onEvent: () {});
+                  : buttonTextWhite(
+                      text: "Add to cart",
+                      onEvent: () {
+                        BlocProvider.of<ProductBloc>(context)
+                            .add(AddItemEvent(item.name));
+                      });
             },
           ),
         ],

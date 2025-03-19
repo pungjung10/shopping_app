@@ -1,9 +1,9 @@
-part of 'product_list_bloc.dart';
+part of 'recommended_product_list_bloc.dart';
 
 @immutable
-abstract class ProductListEvent {}
+abstract class RecommendedProductListEvent {}
 
-class ProductListLoadData extends ProductListEvent {
+class RecommendedProductListLoadData extends RecommendedProductListEvent {
 
-  ProductListLoadData();
+  RecommendedProductListLoadData();
 }
