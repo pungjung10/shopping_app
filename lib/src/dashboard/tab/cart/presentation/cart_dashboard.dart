@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/src/core/injection.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/data/model/product_request.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/domain/model/summary_model.dart';
-import 'package:shopping_app/src/dashboard/tab/cart/presentation/check_out_bloc/check_out_bloc.dart';
+import 'package:shopping_app/src/dashboard/tab/cart/presentation/checkout_bloc/checkout_bloc.dart';
 import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shopping_app/src/feature/shopping/product_item/presentation/bloc/product_bloc.dart';
@@ -22,6 +23,8 @@ class CartDashboard extends StatefulWidget {
 }
 
 class _CartDashboardState extends State<CartDashboard> {
+  final checkOutBloc = CheckoutBloc(sl());
+
   @override
   void initState() {
     super.initState();
@@ -38,83 +41,88 @@ class _CartDashboardState extends State<CartDashboard> {
         title: const Text("Cart", style: fontTitleLarge),
         backgroundColor: ColorResources.white,
       ),
-      body: BlocConsumer<CheckOutBloc, CheckOutState>(
-        listener: (context, state) {
-          if (state is CheckOutError) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWidget(
-                text: "Something went wrong",
+      body: BlocProvider(
+        create: (context) => checkOutBloc,
+        child: BlocConsumer<CheckoutBloc, CheckoutState>(
+          listener: (context, state) {
+            if (state is CheckoutError) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBarWidget(
+                  text: "Something went wrong",
+                  onEvent: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  }));
+            }
+          },
+          builder: (context, state) {
+            if (state is CheckoutSuccess) {
+              return generalWidget(
+                title: "Success!",
+                buttonText: "Shop again",
+                description: "Thank you for shopping with us!",
                 onEvent: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                }));
-          }
-        },
-        builder: (context, state) {
-          if (state is CheckOutSuccess) {
-            return generalWidget(
-              title: "Success!",
-              buttonText: "Shop again",
-              description: "Thank you for shopping with us!",
-              onEvent: () {
-                Navigator.pop(context);
+                  BlocProvider.of<ProductBloc>(context)
+                      .add(ClearAllItemEvent());
+                  Navigator.pop(context);
+                },
+              );
+            }
+            return BlocBuilder<CartBloc, CartState>(
+              builder: (context, cartState) {
+                if (cartState is CartUpdated) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: cartState.productList.length,
+                          itemBuilder: (context, index) {
+                            Map<ItemModel, int> product =
+                                cartState.productList[index];
+                            return Dismissible(
+                              key: Key(product.keys.first.id.toString()),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                BlocProvider.of<ProductBloc>(context)
+                                    .add(ClearItemEvent(product.keys.first));
+                              },
+                              background: Container(
+                                color: ColorResources.red,
+                                child: Stack(
+                                    alignment: Alignment.centerRight,
+                                    children: [
+                                      Positioned(
+                                        right: 76,
+                                        child: Image.asset(
+                                            width: 24,
+                                            height: 24,
+                                            "assets/common/delete.png"),
+                                      ),
+                                    ]),
+                              ),
+                              child: ProductItemWidget(
+                                  item: product.keys.first,
+                                  quality: product.values.firstOrNull ?? 0,
+                                  isCart: true),
+                            );
+                          },
+                        ),
+                      ),
+                      _summarySection(cartState.summary)
+                    ],
+                  );
+                } else if (cartState is CartEmpty) {
+                  return generalWidget(
+                    title: "Empty Cart",
+                    buttonText: "Go to shopping",
+                    onEvent: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                }
+                return Container();
               },
             );
-          }
-          return BlocBuilder<CartBloc, CartState>(
-            builder: (context, cartState) {
-              if (cartState is CartUpdated) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: cartState.productList.length,
-                        itemBuilder: (context, index) {
-                          Map<ItemModel, int> product =
-                              cartState.productList[index];
-                          return Dismissible(
-                            key:Key(product.keys.first.id.toString()),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {
-                              BlocProvider.of<ProductBloc>(context)
-                                  .add(ClearItemEvent(product.keys.first));
-                            },
-                            background: Container(
-                              color: ColorResources.red,
-                              child: Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: [
-                                    Positioned(
-                                      right: 76,
-                                      child: Image.asset(
-                                          width: 24,
-                                          height: 24,
-                                          "assets/common/delete.png"),
-                                    ),
-                                  ]),
-                            ),
-                            child: ProductItemWidget(
-                                item: product.keys.first,
-                                quality: product.values.firstOrNull ?? 0,
-                                isCart: true),
-                          );
-                        },
-                      ),
-                    ),
-                    _summarySection(cartState.summary)
-                  ],
-                );
-              } else if(cartState is CartEmpty){
-                return generalWidget(
-                  title: "Empty Cart",
-                  buttonText: "Go to shopping",
-                  onEvent: () {
-                    Navigator.pop(context);
-                  },
-                );
-              }
-              return Container();
-            },
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -151,8 +159,8 @@ class _CartDashboardState extends State<CartDashboard> {
               buttonTextWhite(
                   text: "Checkout",
                   onEvent: () {
-                    BlocProvider.of<CheckOutBloc>(context)
-                        .add(CheckOut(ProductRequest(products: [0])));
+                    checkOutBloc.add(CheckOut(
+                        ProductRequest(products: data.productNetPrices)));
                   })
             ]),
           ],

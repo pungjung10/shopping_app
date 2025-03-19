@@ -4,23 +4,23 @@ import 'package:shopping_app/src/dashboard/tab/cart/data/model/product_request.d
 import 'package:shopping_app/src/dashboard/tab/cart/domain/usecase/check_out_usecase.dart';
 
 
-part 'check_out_event.dart';
+part 'checkout_event.dart';
 
-part 'check_out_state.dart';
+part 'checkout_state.dart';
 
-class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
+class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final CheckOutUseCase _checkOutUseCase;
 
-  CheckOutBloc(this._checkOutUseCase) : super(CheckOutInitial()) {
+  CheckoutBloc(this._checkOutUseCase) : super(CheckoutInitial()) {
 
     on<CheckOut>((event, emit) async {
       final result = await _checkOutUseCase.execute(event.product);
       result.fold((e) {
-        emit(CheckOutError());
+        emit(CheckoutError());
       }, (res) {
-        emit(CheckOutSuccess());
+        emit(CheckoutSuccess());
       });
-
     });
+
   }
 }

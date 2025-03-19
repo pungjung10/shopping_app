@@ -20,3 +20,7 @@ class ClearItemEvent extends ProductEvent {
 
   ClearItemEvent(this.product);
 }
+
+class ClearAllItemEvent extends ProductEvent {
+  ClearAllItemEvent();
+}

@@ -1,10 +1,10 @@
-part of 'check_out_bloc.dart';
+part of 'checkout_bloc.dart';
 
 @immutable
-abstract class CheckOutState {}
+abstract class CheckoutState {}
 
-class CheckOutInitial extends CheckOutState {}
+class CheckoutInitial extends CheckoutState {}
 
-class CheckOutError extends CheckOutState {}
+class CheckoutError extends CheckoutState {}
 
-class CheckOutSuccess extends CheckOutState {}
+class CheckoutSuccess extends CheckoutState {}

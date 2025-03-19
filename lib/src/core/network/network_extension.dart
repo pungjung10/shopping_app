@@ -18,10 +18,10 @@ class NetworkExtension {
       if (response.data != null) {
         return onSuccess(response.data);
       } else {
-        if (response.response.statusCode == 200) {
-          return onSuccessWithEmpty!();
+        if (response.response.statusCode == 200 || response.response.statusCode == 204) {
+          return onSuccess(response.data);
         } else {
-          return onFailure(const Failure(errorMessage: 'response empty'));
+          return onFailure(Failure(errorMessage: response.response.statusMessage.toString()));
         }
       }
     } on DioException catch (e) {

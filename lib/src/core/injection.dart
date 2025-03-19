@@ -12,7 +12,7 @@ import 'package:shopping_app/src/feature/shopping/product_list/presentation/bloc
 import 'package:shopping_app/src/feature/shopping/product_recommend_list/domain/get_recommended_product_usecase.dart';
 import 'package:shopping_app/src/feature/shopping/product_recommend_list/presentation/bloc/recommended_product_list_bloc.dart';
 
-import '../dashboard/tab/cart/presentation/check_out_bloc/check_out_bloc.dart';
+import '../dashboard/tab/cart/presentation/checkout_bloc/checkout_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -40,7 +40,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<CalculateTotalPriceUseCase>(() => CalculateTotalPriceUseCaseImpl());
   sl.registerFactory<CheckOutUseCase>(() => CheckOutUseCaseImpl(sl()));
   sl.registerFactory<CartBloc>(() => CartBloc(sl()));
-  sl.registerFactory<CheckOutBloc>(() => CheckOutBloc(sl()));
+  sl.registerFactory<CheckoutBloc>(() => CheckoutBloc(sl()));
 
 
 }

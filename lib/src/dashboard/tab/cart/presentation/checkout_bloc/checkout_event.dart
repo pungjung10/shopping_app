@@ -1,10 +1,14 @@
-part of 'check_out_bloc.dart';
+part of 'checkout_bloc.dart';
 
 @immutable
-abstract class CheckOutEvent {}
+abstract class CheckoutEvent {}
 
-class CheckOut extends CheckOutEvent {
+class CheckOut extends CheckoutEvent {
   final ProductRequest product;
 
   CheckOut(this.product);
+}
+
+class InitCart extends CheckoutEvent {
+  InitCart();
 }

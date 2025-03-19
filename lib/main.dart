@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/src/core/injection.dart';
 import 'package:shopping_app/src/dashboard/dashboard_screen.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/presentation/bloc/cart_bloc.dart';
-import 'package:shopping_app/src/dashboard/tab/cart/presentation/check_out_bloc/check_out_bloc.dart';
+import 'package:shopping_app/src/dashboard/tab/cart/presentation/checkout_bloc/checkout_bloc.dart';
 import 'package:shopping_app/src/feature/shopping/product_item/presentation/bloc/product_bloc.dart';
 import 'package:shopping_app/src/feature/shopping/product_list/presentation/bloc/product_list_bloc.dart';
 
@@ -17,7 +17,6 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => CartBloc(sl())),
-        BlocProvider(create: (context) => CheckOutBloc(sl())),
         BlocProvider(create: (context) => ProductBloc()),
         BlocProvider(create: (context) => ProductListBloc(sl())),
         BlocProvider(create: (context) => RecommendedProductListBloc(sl())),

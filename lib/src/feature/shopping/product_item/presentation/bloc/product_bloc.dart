@@ -57,6 +57,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
       emit(ProductState(_mergeProductList()));
     });
+
+    on<ClearAllItemEvent>((event, emit) async {
+      productList.clear();
+      emit(ProductState(_mergeProductList()));
+    });
   }
 
   Map<ItemModel, int> _mergeProductList() {
