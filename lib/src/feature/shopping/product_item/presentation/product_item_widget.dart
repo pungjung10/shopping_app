@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/src/core/style/color_resource.dart';
+import 'package:shopping_app/src/dashboard/tab/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
 import 'package:shopping_app/src/feature/shopping/product_item/presentation/bloc/product_bloc.dart';
 
@@ -9,8 +10,14 @@ import '../../../../shared/widget/button_widget.dart';
 
 class ProductItemWidget extends StatelessWidget {
   final ItemModel item;
+  final int quality;
+  final bool isCart;
 
-  const ProductItemWidget({super.key, required this.item});
+  const ProductItemWidget(
+      {super.key,
+      required this.item,
+      required this.quality,
+      required this.isCart});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +63,10 @@ class ProductItemWidget extends StatelessWidget {
           ),
           BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
-              int quantity = state.items[item.name] ?? 0;
+              int quantity = state.items[item] ?? 0;
+              List<Map<ItemModel, int>> productList =
+                  BlocProvider.of<ProductBloc>(context).productList;
+              BlocProvider.of<CartBloc>(context).add(UpdateCart(productList));
               return quantity > 0
                   ? Row(
                       children: [
@@ -64,23 +74,25 @@ class ProductItemWidget extends StatelessWidget {
                             icon: Icons.remove,
                             onEvent: () {
                               BlocProvider.of<ProductBloc>(context)
-                                  .add(RemoveItemEvent(item.name));
+                                  .add(RemoveItemEvent(item));
                             }),
                         Text(quantity.toString(), style: fontTitleMedium),
                         buttonIcon(
                             icon: Icons.add,
                             onEvent: () {
                               BlocProvider.of<ProductBloc>(context)
-                                  .add(AddItemEvent(item.name));
+                                  .add(AddItemEvent(item));
                             })
                       ],
                     )
-                  : buttonTextWhite(
-                      text: "Add to cart",
-                      onEvent: () {
-                        BlocProvider.of<ProductBloc>(context)
-                            .add(AddItemEvent(item.name));
-                      });
+                  : isCart
+                      ? Container()
+                      : buttonTextWhite(
+                          text: "Add to cart",
+                          onEvent: () {
+                            BlocProvider.of<ProductBloc>(context)
+                                .add(AddItemEvent(item));
+                          });
             },
           ),
         ],

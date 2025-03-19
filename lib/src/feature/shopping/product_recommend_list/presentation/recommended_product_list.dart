@@ -33,7 +33,8 @@ class _RecommendedProductListState extends State<RecommendedProductList> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.product.length,
             itemBuilder: (context, index) {
-              return ProductItemWidget(item: state.product[index]);
+              return ProductItemWidget(
+                  item: state.product[index], quality: 0, isCart: false);
             },
           );
         } else if (state is RecommendedProductListError) {

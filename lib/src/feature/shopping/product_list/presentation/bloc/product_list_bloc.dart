@@ -10,13 +10,16 @@ part 'product_list_state.dart';
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   final GetProductUseCase _getProductUseCase;
 
+  String cursor = "";
+
   ProductListBloc(this._getProductUseCase) : super(ProductListInitial()) {
     on<ProductListLoadData>((event, emit) async {
       emit(ProductListLoading());
-      final result = await _getProductUseCase.execute(20, event.cursor);
+      final result = await _getProductUseCase.execute(20, cursor);
       result.fold((e) {
         emit(ProductListError());
       }, (res) {
+        cursor = res.cursor;
         emit(ProductListSuccess(product: res));
       });
     });
@@ -24,14 +27,16 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     on<ProductListLoadMoreData>((event, emit) async {
       if (state is ProductListSuccess) {
         final currentState = state as ProductListSuccess;
-        final result = await _getProductUseCase.execute(20, event.cursor);
+        final result = await _getProductUseCase.execute(20, cursor);
         result.fold((e) {
           emit(ProductListError());
         }, (res) {
+          cursor = res.cursor;
           final updatedProductList = currentState.product.copyWith(
             items: [...currentState.product.items, ...res.items],
             cursor: res.cursor,
           );
+
           emit(ProductListSuccess(product: updatedProductList));
         });
       }

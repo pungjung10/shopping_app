@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/src/core/style/color_resource.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/presentation/cart_dashboard.dart';
 import 'package:shopping_app/src/dashboard/tab/shopping/presentation/shopping_dashboard.dart';
 
@@ -22,9 +23,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     if (index == 1) {
       _selectedIndex = 0;
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const CartDashboard()),
+        MaterialPageRoute(
+            builder: (context) => const CartDashboard()),
       );
     }
   }
@@ -32,9 +35,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorResources.white,
       body: SafeArea(
           child: _selectedIndex == 0 ? _screens[_selectedIndex] : Container()),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: ColorResources.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [

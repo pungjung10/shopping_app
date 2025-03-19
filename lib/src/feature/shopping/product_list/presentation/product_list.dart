@@ -33,7 +33,7 @@ class _ProductListState extends State<ProductList> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.product.items.length,
             itemBuilder: (context, index) {
-              return ProductItemWidget(item: state.product.items[index]);
+              return ProductItemWidget(item: state.product.items[index], quality: 0, isCart: false);
             },
           );
         } else if (state is ProductListError) {
@@ -42,7 +42,7 @@ class _ProductListState extends State<ProductList> {
               image: "assets/common/cancel.png",
               buttonText: "Refresh",
               onEvent: () {
-                BlocProvider.of<ProductListBloc>(context).add(ProductListLoadData(""));
+                BlocProvider.of<ProductListBloc>(context).add(ProductListLoadData());
               });
         }
         return const SizedBox.shrink();
