@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
-import 'package:shopping_app/src/feature/shopping/product_recommend_list/domain/get_recommended_product_usecase.dart';
+import 'package:shopping_app/src/feature/shopping/product_recommend_list/domain/usecase/get_recommended_product_usecase.dart';
 
 part 'recommended_product_list_event.dart';
 

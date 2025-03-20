@@ -3,7 +3,7 @@ import 'package:shopping_app/src/dashboard/tab/shopping/data/model/item_response
 import 'package:shopping_app/src/dashboard/tab/shopping/data/shopping_repository.dart';
 import 'package:shopping_app/src/dashboard/tab/shopping/domain/model/item_model.dart';
 
-import '../../../../core/base/failure.dart';
+import '../../../../../core/base/failure.dart';
 
 abstract class GetRecommendedProductUseCase {
   Future<Either<Failure, List<ItemModel>>> execute();

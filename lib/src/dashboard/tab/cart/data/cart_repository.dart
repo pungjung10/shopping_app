@@ -24,6 +24,4 @@ class CartRepositoryImpl implements CartRepository {
           return Left(l);
         });
   }
-
-
 }

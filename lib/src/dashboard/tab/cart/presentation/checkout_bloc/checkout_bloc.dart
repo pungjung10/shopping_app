@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/data/model/product_request.dart';
-import 'package:shopping_app/src/dashboard/tab/cart/domain/usecase/check_out_usecase.dart';
+import 'package:shopping_app/src/dashboard/tab/cart/domain/usecase/checkout_usecase.dart';
 
 
 part 'checkout_event.dart';

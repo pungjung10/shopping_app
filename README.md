@@ -1,16 +1,27 @@
 # shopping_app
 
-A new Flutter project.
+### Prerequisites
+Make sure you have the following installed:
+- Flutter SDK
+- Android Studio or VS Code (with Flutter and Dart plugins)
+- An emulator (Android or iOS)
 
-## Getting Started
+### Dependencies
+Run the following command to install the project dependencies:
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+```
 
-A few resources to get you started if this is your first Flutter project:
+### Generating Retrofit Dio Code
+Run the following command to generate retrofit Dio code:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Base URL Configuration
+- Android Emulator: If you're running the app on an Android Emulator, use the following base URL for API calls:
+  http://10.0.2.2:8080
+- iOS Simulator: If you're running the app on the iOS Simulator, use the following base URL for API calls:
+  http://localhost:8080
