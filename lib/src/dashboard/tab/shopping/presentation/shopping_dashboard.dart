@@ -16,13 +16,17 @@ class ShoppingDashboard extends StatefulWidget {
 
 class _ShoppingDashboardState extends State<ShoppingDashboard> {
   final ScrollController _scrollController = ScrollController();
+  bool _isLoadMore = false;
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
     BlocProvider.of<ProductListBloc>(context).add(ProductListLoadData());
-    BlocProvider.of<RecommendedProductListBloc>(context).add(RecommendedProductListLoadData());
+    BlocProvider.of<RecommendedProductListBloc>(context)
+        .add(RecommendedProductListLoadData());
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -33,29 +37,49 @@ class _ShoppingDashboardState extends State<ShoppingDashboard> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 100) {
       BlocProvider.of<ProductListBloc>(context).add(ProductListLoadMoreData());
+      setState(() {
+        _isLoadMore = true;
+      });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: _scrollController,
-      child: const SizedBox(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Padding(
+            const Padding(
               padding: EdgeInsets.all(16),
               child: Text("Recommend Product", style: fontTitleLarge),
             ),
-            RecommendedProductList(),
-             Padding(
+            const RecommendedProductList(),
+            const Padding(
               padding: EdgeInsets.all(16),
               child: Text("Latest Products", style: fontTitleLarge),
             ),
-            ProductList()
+            const ProductList(),
+            if (_isLoadMore)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth:3)),
+                    SizedBox(width: 12),
+                    Text(
+                      "Loading..",
+                      style: fontTitleSmall,
+                    )
+                  ],
+                ),
+              )
           ],
         ),
       ),

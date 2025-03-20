@@ -12,7 +12,7 @@ abstract class ShoppingService {
 
   @GET("/products")
   Future<HttpResponse<ProductResponse?>> getProduct(
-      @Path("limit") int limit, @Path("cursor") String cursor);
+      @Query("limit") int limit, @Query("cursor") String cursor);
 
   @GET("/recommended-products")
   Future<HttpResponse<List<ItemResponse>?>> getRecommendedProduct();

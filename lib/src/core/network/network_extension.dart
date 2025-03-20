@@ -10,7 +10,6 @@ class NetworkExtension {
     required Future<HttpResponse<T>> Function() onCall,
     required Either<Failure, T> Function(T) onSuccess,
     required Either<Failure, T> Function(Failure) onFailure,
-    Either<Failure, T> Function()? onSuccessWithEmpty,
   }) async {
     try {
       final response = await onCall();

@@ -55,15 +55,20 @@ class _CartDashboardState extends State<CartDashboard> {
           },
           builder: (context, state) {
             if (state is CheckoutSuccess) {
-              return generalWidget(
-                title: "Success!",
-                buttonText: "Shop again",
-                description: "Thank you for shopping with us!",
-                onEvent: () {
-                  BlocProvider.of<ProductBloc>(context)
-                      .add(ClearAllItemEvent());
-                  Navigator.pop(context);
-                },
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  generalWidget(
+                    title: "Success!",
+                    buttonText: "Shop again",
+                    description: "Thank you for shopping with us!",
+                    onEvent: () {
+                      BlocProvider.of<ProductBloc>(context)
+                          .add(ClearAllItemEvent());
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               );
             }
             return BlocBuilder<CartBloc, CartState>(
@@ -110,12 +115,17 @@ class _CartDashboardState extends State<CartDashboard> {
                     ],
                   );
                 } else if (cartState is CartEmpty) {
-                  return generalWidget(
-                    title: "Empty Cart",
-                    buttonText: "Go to shopping",
-                    onEvent: () {
-                      Navigator.pop(context);
-                    },
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      generalWidget(
+                        title: "Empty Cart",
+                        buttonText: "Go to shopping",
+                        onEvent: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
                   );
                 }
                 return Container();

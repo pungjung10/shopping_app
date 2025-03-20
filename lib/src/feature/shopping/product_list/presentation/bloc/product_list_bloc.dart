@@ -11,6 +11,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   final GetProductUseCase _getProductUseCase;
 
   String cursor = "";
+  bool _isLoadMore = true;
 
   ProductListBloc(this._getProductUseCase) : super(ProductListInitial()) {
     on<ProductListLoadData>((event, emit) async {
@@ -19,19 +20,22 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold((e) {
         emit(ProductListError());
       }, (res) {
-        cursor = res.cursor;
+        cursor = Uri.encodeComponent(res.cursor);
         emit(ProductListSuccess(product: res));
       });
     });
 
     on<ProductListLoadMoreData>((event, emit) async {
-      if (state is ProductListSuccess) {
+      if (state is ProductListSuccess && _isLoadMore) {
+        _isLoadMore = false;
         final currentState = state as ProductListSuccess;
         final result = await _getProductUseCase.execute(20, cursor);
         result.fold((e) {
+          _isLoadMore = true;
           emit(ProductListError());
         }, (res) {
-          cursor = res.cursor;
+          _isLoadMore = true;
+          cursor = Uri.encodeComponent(res.cursor);
           final updatedProductList = currentState.product.copyWith(
             items: [...currentState.product.items, ...res.items],
             cursor: res.cursor,
