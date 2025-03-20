@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shopping_app/src/dashboard/tab/cart/data/cart_repository.dart';
@@ -19,9 +21,11 @@ final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
   sl.registerSingleton<Dio>(Dio());
 
+  final String baseUrl = _getBaseUrl();
+
   // SHOPPING
   sl.registerSingleton<ShoppingService>(
-    ShoppingService(sl(), baseUrl: "http://10.0.2.2:8080"),
+    ShoppingService(sl(), baseUrl: baseUrl),
   );
   sl.registerSingleton<ShoppingRepository>(ShoppingRepositoryImpl(sl()));
 
@@ -41,6 +45,12 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<CheckOutUseCase>(() => CheckOutUseCaseImpl(sl()));
   sl.registerFactory<CartBloc>(() => CartBloc(sl()));
   sl.registerFactory<CheckoutBloc>(() => CheckoutBloc(sl()));
+}
 
-
+String _getBaseUrl() {
+  if (Platform.isAndroid) {
+    return "http://10.0.2.2:8080";
+  } else {
+    return "http://localhost:8080";
+  }
 }
