@@ -37,7 +37,7 @@ Future<void> initializeDependencies() async {
 
   // CART
   sl.registerSingleton<CartService>(
-    CartService(sl(), baseUrl: "http://10.0.2.2:8080"),
+    CartService(sl(), baseUrl: baseUrl),
   );
   sl.registerSingleton<CartRepository>(CartRepositoryImpl(sl()));
 
